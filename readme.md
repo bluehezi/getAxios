@@ -15,10 +15,16 @@
       data: 请求参数
       adapter: true | false  ,是否打开调试器。 截取请求，查看请求的信息
 - cancel (key, type) : 
-      key : 主动取消值key的请求，为空时，取消所有的请求
-      type: 主动请求所有的请求类型为type且key值的请求
+      key : 
+      type: 'post' | 'get' | 空。
 
-
+- cancel (obj) :
+      obj {
+        key: key | 空, 主动取消值key的请求
+        type: 'post' | 'type' | 空   主动取消请求类型为type且key值的请求。为空时，取消所有的key值请求
+      }
+      obj 为空时，取消所有正在进行的请求
+```
 # 使用
 - 引入外链cdn --- axios
 ```

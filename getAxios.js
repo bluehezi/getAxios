@@ -40,23 +40,36 @@ function getAxios () {
           ,adapter: adapter ? this.adapter : null
       })
     },
-    cancel (key, type) {
-      if (key == undefined) {
-        // 取消所有的该对象维护的网络请求
-        for (var _type in _Axios.keys) {
-          for (var _k in _Axios.keys[_type]) {
+    Msg: {
+      cancel: "initiative-cancel-all"  // 取消所有的请求，用到的消息提示
+    },
+    cancel (obj) {
+      if (!obj) {
+        // 取消所有的该对象维护的网络请求        
+        for (let _type in _Axios.keys) {
+          for (let _k in _Axios.keys[_type]) {
             _Axios.keys[_type][_k](_Axios.Msg.cancel);
+            _Axios.keys[_type][_k] = undefined;
           }
         }
         return
       }
-      // 取消指定的网络请求
-      type = type ? type : 'get';
-      _Axios.keys[type][key] ? _Axios.keys[type][key](key + '-cancel') : null;
-      _Axios.keys[type][key] = undefined;
-    },
-    Msg: {
-      cancel: "initiative-cancel-all"
+      let key = obj.key,
+          type = obj.type;
+      if (!key && type) {  // 只传 type 值 时
+        for (let _k in _Axios.keys[type]) {
+          _Axios.keys[type][_k](_k + '-cancel');
+          _Axios.keys[type][_k] = undefined;
+        }
+      } else if (key && !type) {  // 只传 key 值时
+        for (let _type in _Axios.keys) {
+          _Axios.keys[_type][key] ? _Axios.keys[_type][key](key + '-cancel') : null;
+          _Axios.keys[_type][key] = undefined;
+        }
+      } else if (key && type) { // 同时传 key 和  type 时
+        _Axios.keys[type][key] ? _Axios.keys[type][key](key + '-cancel') : null;
+        _Axios.keys[type][key] = undefined;
+      }
     }
   }
   _Axios.keys = {

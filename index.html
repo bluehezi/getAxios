@@ -10,16 +10,37 @@
 </head>
 <body>
   <script>
+    let key = 'local-test'
     $axios = getAxios();
     console.log($axios);
+
     $axios
-      .get('local', 'http://localhost:8080', {}, false)
+      .get(key, 'http://localhost:8080', {}, false)
       .then(res => {
         console.log(res)
       })
       .catch(err => {
+        if (err.message === (key + '-cancel') || err.message === $axios.Msg.cancel) {
+          return
+        }
         console.log(err)
       })
-  </script>
+      $axios.get(key, 'http://localhost:8080', {id: 1}, false)
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        // if (err.message === (key + '-cancel') || err.message === $axios.Msg.cancel) {
+        //   return
+        // }
+        console.error(err)
+      })
+      // $axios.cancel({type: 'post'})  // 取消正在进行的所有的post请求
+      // $axios.cancel({type: 'get'})   // 取消正在进行的所有的get请求
+      // $axios.cancel({key: key})      // 取消正在进行的所有type类型的key值的请求
+      // $axios.cancel({key: key, type: 'post'}) // 取消正在进行的类型为post，值为key的请求
+      $axios.cancel({key: key, type: 'get'})    // 取消正在进行的类型为get， 值为key的请求
+
+</script>
 </body>
 </html>
