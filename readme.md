@@ -2,7 +2,7 @@
 利用axios的cancelToken特性，取消相同key值，相同请求方法的请求，开启新的请求。
 避免多次点击同时请求数据覆盖问题
 # 使用
-- 引入外链cdnaxios
+- 引入外链cdn --- axios
 ```
   <script src="https://cdn.bootcss.com/axios/0.17.1/axios.js"></script>
 ```
