@@ -17,7 +17,7 @@ function getAxios () {
         resolve({data: 'adapter调试'})
       })
     },
-    get (key, url, data) {
+    get (key, url, data, adapter) {
       if (_Axios.keys.get[key]) {
         _Axios.keys.get[key](key + "-cancel");
       }
@@ -26,10 +26,10 @@ function getAxios () {
         cancelToken: new CancelToken(function executor(cancel){
           _Axios.keys.get[key] = cancel;
         })
-        // ,adapter : this.adapter
+        ,adapter: adapter ? this.adapter : null
       })
     },
-    post (key, url, data) {
+    post (key, url, data, adapter) {
       if (_Axios.keys.post[key]) {
         _Axios.keys.post[key](key + "-cancel");
       }
@@ -37,7 +37,7 @@ function getAxios () {
         cancelToken: new CancelToken(function executor(cancel) {
             _Axios.keys.post[key] = cancel;
           })
-          // ,adapter: this.adapter
+          ,adapter: adapter ? this.adapter : null
       })
     },
     cancel (key, type) {
