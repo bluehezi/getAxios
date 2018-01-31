@@ -1,6 +1,24 @@
 # 介绍
 利用axios的cancelToken特性，取消相同key值，相同请求方法的请求，开启新的请求。
 避免多次点击同时请求数据覆盖问题
+
+# 说明
+```
+- get (key, url, data, adapter) :  该方法调用时，会取消相同key值的请求 
+      key: 标明相同功能的请求的key值
+      url: 请求url地址
+      data: 请求参数
+      adapter: true | false  ,是否打开调试器。 截取请求，查看请求的信息
+- post (key, url, data, adapter) :  该方法调用时，会取消相同key值的请求
+      key: 标明相同功能的请求的key值
+      url: 请求url地址
+      data: 请求参数
+      adapter: true | false  ,是否打开调试器。 截取请求，查看请求的信息
+- cancel (key, type) : 
+      key : 主动取消值key的请求，为空时，取消所有的请求
+      type: 主动请求所有的请求类型为type且key值的请求
+
+
 # 使用
 - 引入外链cdn --- axios
 ```
@@ -10,7 +28,7 @@
 ```
   let $axios = getAxios()
   $axios
-    .get(key, url, data)
+    .get(key, url, data, false)
     .then(res => {
       if (res.status === 200) {
         let data = res.data
@@ -36,7 +54,7 @@
       }
      
       this.$axios
-        .get(key, '/offer/offer-list', data)
+        .get(key, '/offer/offer-list', data, false)
         .then(res => {
           if (res.status === 200) {
           } else {
