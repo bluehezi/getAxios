@@ -14,9 +14,6 @@
       url: 请求url地址
       data: 请求参数
       adapter: true | false  ,是否打开调试器。 截取请求，查看请求的信息
-- cancel (key, type) : 
-      key : 
-      type: 'post' | 'get' | 空。
 
 - cancel (obj) :
       obj {
