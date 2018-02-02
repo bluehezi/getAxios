@@ -36,7 +36,7 @@
 ```
   let $axios = getAxios()
   $axios
-    .get(key, url, data, false)
+    .get(key, url, data)
     .then(res => {
       if (res.status === 200) {
         let data = res.data
@@ -62,7 +62,7 @@
       }
      
       this.$axios
-        .get(key, '/offer/offer-list', data, false)
+        .get(key, '/offer/offer-list', data)
         .then(res => {
           if (res.status === 200) {
           } else {
