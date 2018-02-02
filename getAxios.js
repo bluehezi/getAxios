@@ -10,12 +10,22 @@ function getAxios () {
   var CancelToken = axios.CancelToken;
   function _Axios () {}
   _Axios.prototype = {
-    // 调试观察请求头函数
-    adapter (config) {
-      console.log(config);
-      return new Promise((resolve,reject) => {
-        resolve({data: 'adapter调试'})
-      })
+    /** 闭包调试   
+      1、调试观察请求头函数
+      2、调试，自定义返回数据，到 then 或 catch 函数中，可以用来模拟数据
+    */
+    _closuresAdapter (data) {
+      return function (config) {
+        config._Axios_tip = '调试信息'
+        console.log(config)
+        let _data = JSON.parse(JSON.stringify(data))
+        return new Promise((resolve, reject) => {
+          resolve({
+            data: _data,
+            tip: 'adapter调试'
+          })
+        })
+      }
     },
     get (key, url, data, adapter) {
       if (_Axios.keys.get[key]) {
@@ -26,7 +36,7 @@ function getAxios () {
         cancelToken: new CancelToken(function executor(cancel){
           _Axios.keys.get[key] = cancel;
         })
-        ,adapter: adapter ? this.adapter : null
+        ,adapter: adapter ? this._closuresAdapter(adapter) : null
       })
     },
     post (key, url, data, adapter) {
@@ -37,7 +47,7 @@ function getAxios () {
         cancelToken: new CancelToken(function executor(cancel) {
             _Axios.keys.post[key] = cancel;
           })
-          ,adapter: adapter ? this.adapter : null
+        ,adapter: adapter ? this._closuresAdapter(adapter) : null
       })
     },
     Msg: {

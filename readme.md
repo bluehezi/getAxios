@@ -8,12 +8,17 @@
       key: 标明相同功能的请求的key值
       url: 请求url地址
       data: 请求参数
-      adapter: true | false  ,是否打开调试器。 截取请求，查看请求的信息
+      adapter: 空 | 任意值  是否打开调试器。截取请求，查看请求的信息
+               空时，不开调试器。
+               传入值时，会打开调试器。 并且会把传入的值传到then方法中。可以用来模拟数据
+
 - post (key, url, data, adapter) :  该方法调用时，会取消相同key值的请求
       key: 标明相同功能的请求的key值
       url: 请求url地址
       data: 请求参数
-      adapter: true | false  ,是否打开调试器。 截取请求，查看请求的信息
+      adapter: 空 | 任意值  是否打开调试器。截取请求，查看请求的信息
+               空时，不开调试器。
+               传入值时，会打开调试器。 并且会把传入的值传到then方法中。可以用来模拟数据
 
 - cancel (obj) :
       obj {
