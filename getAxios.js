@@ -14,12 +14,30 @@ function getAxios () {
       1、调试观察请求头函数
       2、调试，自定义返回数据，到 then 或 catch 函数中，可以用来模拟数据
     */
-    _closuresAdapter (data) {
+    _closuresAdapter: function (fnOrData) {
       return function (config) {
+        let _data, _fn
         config._Axios_tip = '调试信息'
         console.log(config)
-        let _data = JSON.parse(JSON.stringify(data))
+        
+        
+        // if (typeof fnOrData === 'function') {
+        //   _fn = fnOrData
+        // } else {
+          _data = JSON.parse(JSON.stringify(fnOrData))
+        // }
         return new Promise((resolve, reject) => {
+          
+          // if (_fn) {
+          //   _data = _fn()
+          //   if (_data) {
+          //     resolve({
+          //       data: _data,
+          //       tip: 'adapter调试'
+          //     })
+          //   }
+          //   reject({tip: 'adapter调试'})
+          // }
           resolve({
             data: _data,
             tip: 'adapter调试'
@@ -27,10 +45,11 @@ function getAxios () {
         })
       }
     },
-    get (key, url, data, adapter) {
-      if (_Axios.keys.get[key]) {
-        _Axios.keys.get[key](key + "-cancel");
-      }
+    get: function (key, url, data, adapter) {
+      this.cancel({
+        key,
+        type: 'get'
+      })
       return axios.get(url, {
         params: data,
         cancelToken: new CancelToken(function executor(cancel){
@@ -39,10 +58,11 @@ function getAxios () {
         ,adapter: adapter ? this._closuresAdapter(adapter) : null
       })
     },
-    post (key, url, data, adapter) {
-      if (_Axios.keys.post[key]) {
-        _Axios.keys.post[key](key + "-cancel");
-      }
+    post: function (key, url, data, adapter) {
+      this.cancel({
+        key,
+        type: 'post'
+      })
       return axios.post(url, JSON.stringify(data), {
         cancelToken: new CancelToken(function executor(cancel) {
             _Axios.keys.post[key] = cancel;
@@ -53,15 +73,9 @@ function getAxios () {
     Msg: {
       cancel: "initiative-cancel-all"  // 取消所有的请求，用到的消息提示
     },
-    cancel (obj) {
+    cancel: function (obj) {
       if (!obj) {
-        // 取消所有的该对象维护的网络请求        
-        for (let _type in _Axios.keys) {
-          for (let _k in _Axios.keys[_type]) {
-            _Axios.keys[_type][_k](_Axios.Msg.cancel);
-            _Axios.keys[_type][_k] = undefined;
-          }
-        }
+        this.cancelAll();
         return
       }
       let key = obj.key,
@@ -79,8 +93,20 @@ function getAxios () {
       } else if (key && type) { // 同时传 key 和  type 时
         _Axios.keys[type][key] ? _Axios.keys[type][key](key + '-cancel') : null;
         _Axios.keys[type][key] = undefined;
+      } else {
+        this.cancelAll();
+      }
+    },
+    cancelAll: function () {
+      // 取消所有的该对象维护的网络请求        
+      for (let _type in _Axios.keys) {
+        for (let _k in _Axios.keys[_type]) {
+          _Axios.keys[_type][_k](_Axios.Msg.cancel);
+          _Axios.keys[_type][_k] = undefined;
+        }
       }
     }
+    
   }
   _Axios.keys = {
     get: {},

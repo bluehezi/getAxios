@@ -26,6 +26,9 @@
         type: 'post' | 'type' | 空   主动取消请求类型为type且key值的请求。为空时，取消所有的key值请求
       }
       obj 为空时，取消所有正在进行的请求
+
+- cancelAll() : 
+      取消所有的请求
 ```
 # 使用
 - 引入外链cdn --- axios

@@ -20,9 +20,9 @@
         console.log(res)
       })
       .catch(err => {
-        if (err.message === (key + '-cancel') || err.message === $axios.Msg.cancel) {
-          return
-        }
+        // if (err.message === (key + '-cancel') || err.message === $axios.Msg.cancel) {
+        //   return
+        // }
         console.log(err)
       })
       $axios.get(key, 'http://localhost:8080', {id: 1}, obj)
