@@ -18,7 +18,7 @@ function getAxios () {
       return function (config) {
         let _data, timing
         config._Axios_tip = '调试信息'
-        config._axios_request_key = data.$_axios_request_key
+        config.$_axios_request_key = data.$_axios_request_key
         console.log(config)
         
         _data = JSON.parse(JSON.stringify(data.data))
