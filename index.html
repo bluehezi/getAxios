@@ -17,7 +17,10 @@
     
     function go () {
       $axios
-        .get(key, 'http://localhost:8080', {id: 0})
+        .get(key, 'http://localhost:8080', {id: 0}, {
+          data: obj,
+          timing: 5000
+        })
         .then(res => {
           console.log(res)
         })
