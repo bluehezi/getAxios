@@ -16,16 +16,29 @@ function getAxios () {
     */
     _closuresAdapter: function (data) {
       return function (config) {
-        let _data
+        let _data, timing
         config._Axios_tip = '调试信息'
+        config._axios_request_key = data.$_axios_request_key
         console.log(config)
         
-        _data = JSON.parse(JSON.stringify(data))
+        _data = JSON.parse(JSON.stringify(data.data))
+        timing = data.timing
         return new Promise((resolve, reject) => {
+          if (timing && typeof timing == 'number') {
+            setTimeout(() => {
+              resolve({
+                data: _data,
+                tip: 'adapter调试'
+              })  
+            }, timing);
+            return
+          } 
+
+          // 无timing时，立即执行到then函数
           resolve({
             data: _data,
             tip: 'adapter调试'
-          })
+          }) 
         })
       }
     },
@@ -38,6 +51,7 @@ function getAxios () {
         key,
         type: 'get'
       })
+      adapter.$_axios_request_key = '请求的key为: ' + key
       return new Promise((resolve, reject) => {
         axios.get(url, {
           params: data,
