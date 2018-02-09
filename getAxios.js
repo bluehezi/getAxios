@@ -30,28 +30,57 @@ function getAxios () {
       }
     },
     get: function (key, url, data, adapter) {
+      if (!key) {
+        console.log('key值不能为空')
+        return
+      }
       this.cancel({
         key,
         type: 'get'
       })
-      return axios.get(url, {
-        params: data,
-        cancelToken: new CancelToken(function executor(cancel){
-          _Axios.keys.get[key] = cancel;
+      return new Promise((resolve, reject) => {
+        axios.get(url, {
+          params: data,
+          cancelToken: new CancelToken(function executor(cancel){
+            _Axios.keys.get[key] = cancel;
+          })
+          ,adapter: adapter ? this._closuresAdapter(adapter) : null
+        }).then(res => {
+          resolve(res)
+        }).catch(err => {
+          // 拦截 如果是请求被取消而报出的错误
+          if (err.message == key + '-cancel' || err.message == _Axios.Msg.cancel ) {
+            return
+          }
+          reject(err)
         })
-        ,adapter: adapter ? this._closuresAdapter(adapter) : null
-      })
+      }) 
     },
     post: function (key, url, data, adapter) {
+      if (!key) {
+        console.log('key值不能为空')
+        return
+      }
       this.cancel({
         key,
         type: 'post'
       })
-      return axios.post(url, JSON.stringify(data), {
-        cancelToken: new CancelToken(function executor(cancel) {
-            _Axios.keys.post[key] = cancel;
-          })
-        ,adapter: adapter ? this._closuresAdapter(adapter) : null
+
+      return new Promise((resolve, reject) => {
+        axios.post(url, JSON.stringify(data), {
+          cancelToken: new CancelToken(function executor(cancel) {
+              _Axios.keys.post[key] = cancel;
+            })
+          ,adapter: adapter ? this._closuresAdapter(adapter) : null
+        }).then(res => {
+          resolve(res)
+        }).catch(err => {
+          // 拦截 如果是请求被取消而报出的错误
+          if (err.message == key + '-cancel' || err.message == _Axios.Msg.cancel ) {
+            return
+          }
+          reject(err)
+        })
       })
     },
     Msg: {

@@ -9,32 +9,42 @@
   <script src="./getAxios.js"></script>
 </head>
 <body>
+  <button onclick="go()">连接</button>
   <script>
+    var $axios = getAxios();
     let key = 'local-test'
-    $axios = getAxios();
-    // console.log($axios);
     let obj = {name: '小明', age: 10}
-    $axios
-      .get(key, 'http://localhost:8080', {id: 0})
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        // if (err.message === (key + '-cancel') || err.message === $axios.Msg.cancel) {
-        //   return
-        // }
-        console.log(err)
-      })
-      $axios.get(key, 'http://localhost:8080', {id: 1}, obj)
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        // if (err.message === (key + '-cancel') || err.message === $axios.Msg.cancel) {
-        //   return
-        // }
-        console.error(err)
-      })
+    
+    function go () {
+      $axios
+        .get(key, 'http://localhost:8080', {id: 0})
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+    // let key = 'local-test'
+    // $axios = getAxios();
+    // console.log($axios);
+    // let obj = {name: '小明', age: 10}
+    // $axios
+    //   .get(key, 'http://localhost:8080', {id: 0})
+    //   .then(res => {
+    //     console.log(res)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
+      // $axios.cancel()
+      // $axios.get(key, 'http://localhost:8080', {id: 1}, obj)
+      // .then(res => {
+      //   console.log(res)
+      // })
+      // .catch(err => {
+      //   console.error(err)
+      // })
       // $axios.cancel({type: 'post'})  // 取消正在进行的所有的post请求
       // $axios.cancel({type: 'get'})   // 取消正在进行的所有的get请求
       // $axios.cancel({key: key})      // 取消正在进行的所有type类型的key值的请求
