@@ -14,30 +14,14 @@ function getAxios () {
       1、调试观察请求头函数
       2、调试，自定义返回数据，到 then 或 catch 函数中，可以用来模拟数据
     */
-    _closuresAdapter: function (fnOrData) {
+    _closuresAdapter: function (data) {
       return function (config) {
-        let _data, _fn
+        let _data
         config._Axios_tip = '调试信息'
         console.log(config)
         
-        
-        // if (typeof fnOrData === 'function') {
-        //   _fn = fnOrData
-        // } else {
-          _data = JSON.parse(JSON.stringify(fnOrData))
-        // }
+        _data = JSON.parse(JSON.stringify(data))
         return new Promise((resolve, reject) => {
-          
-          // if (_fn) {
-          //   _data = _fn()
-          //   if (_data) {
-          //     resolve({
-          //       data: _data,
-          //       tip: 'adapter调试'
-          //     })
-          //   }
-          //   reject({tip: 'adapter调试'})
-          // }
           resolve({
             data: _data,
             tip: 'adapter调试'
@@ -105,8 +89,7 @@ function getAxios () {
           _Axios.keys[_type][_k] = undefined;
         }
       }
-    }
-    
+    }  
   }
   _Axios.keys = {
     get: {},
